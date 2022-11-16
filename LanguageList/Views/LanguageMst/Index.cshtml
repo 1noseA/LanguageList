@@ -1,4 +1,5 @@
-﻿@model IEnumerable<LanguageList.Models.LanguageMst>
+﻿@model LanguageList.ViewModels.LanguageMstViewModel
+@*@model IEnumerable<LanguageList.Models.LanguageMst>*@
 
 @{
     ViewData["Title"] = "Index";
@@ -13,12 +14,12 @@
             <a asp-action="#">終了</a>
         </div>
         <div class="col-md-6 d-flex justify-content-center mb-4">
-            <form asp-controller="LanguageMst" asp-action="Index">
-                <p>
-                    言語名：
-                    <input type="text" name="SearchString" />
-                    <button type="submit" class="btn btn-secondary">検索</button>
-                </p>
+            <form asp-controller="LanguageMst" asp-action="Index" method="get">
+                言語名：
+                <select asp-for="selectName" asp-items="Model.LanguageNames">
+                    <option value="" selected>全て</option>
+                </select>
+                <button type="submit" class="btn btn-secondary">検索</button>
             </form>
         </div>
     </div>
@@ -26,17 +27,18 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Id)
+                    @Html.DisplayNameFor(model => model.LanguageMst[0].Id)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.LanguageName)
+                    @Html.DisplayNameFor(model => model.LanguageMst[0].LanguageName)
                 </th>
                 <th></th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model) {
+            @foreach (var item in Model.LanguageMst)
+            {
             <tr>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id">
