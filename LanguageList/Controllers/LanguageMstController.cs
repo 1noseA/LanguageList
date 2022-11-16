@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LanguageList.Data;
 using LanguageList.Models;
+using LanguageList.ViewModels;
 
 namespace LanguageList.Controllers
 {
@@ -20,9 +21,27 @@ namespace LanguageList.Controllers
         }
 
         // GET: LanguageMst
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string selectName)
         {
-              return View(await _context.LanguageMst.ToListAsync());
+            // DBから全ての言語名を取得するLINQクエリ
+            IQueryable<string> query = from m in _context.LanguageMst
+                                        orderby m.Id
+                                        select m.LanguageName;
+            var languageMst = from m in _context.LanguageMst
+                         select m;
+
+            if (!String.IsNullOrEmpty(selectName))
+            {
+                languageMst = languageMst.Where(x => x.LanguageName == selectName);
+            }
+            
+            var viewModel = new LanguageMstViewModel
+            {
+                LanguageNames = new SelectList(await query.ToListAsync()),
+                LanguageMst = await languageMst.ToListAsync()
+            };
+
+            return View(viewModel);
         }
 
         // GET: LanguageMst/Details/5
