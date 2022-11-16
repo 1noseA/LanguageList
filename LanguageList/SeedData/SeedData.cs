@@ -69,16 +69,6 @@ namespace LanguageList.Models
                     new LanguageMst
                     {
                         LanguageName = "Go"
-                    },
-
-                    new LanguageMst
-                    {
-                        LanguageName = "VB"
-                    },
-
-                    new LanguageMst
-                    {
-                        LanguageName = "Python"
                     }
 
                 );
