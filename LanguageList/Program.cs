@@ -37,7 +37,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
+    name: "LanguageMst",
     pattern: "{controller=LanguageMst}/{action=Index}/{id?}");
 
 app.Run();

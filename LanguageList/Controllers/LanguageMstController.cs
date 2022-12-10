@@ -94,10 +94,14 @@ namespace LanguageList.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,LanguageName")] LanguageMst languageMst)
         {
+            // 入力チェック問題なければ
             if (ModelState.IsValid)
             {
+                // 入力値の追加
                 _context.Add(languageMst);
+                // INSERT実行
                 await _context.SaveChangesAsync();
+                　// 一覧画面に遷移
                 return RedirectToAction(nameof(Index));
             }
             return View(languageMst);
