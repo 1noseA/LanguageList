@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using LanguageList.Data;
 using LanguageList.Models;
 using LanguageList.ViewModels;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Microsoft.AspNetCore.SignalR.Protocol;
 
 namespace LanguageList.Controllers
 {
@@ -30,7 +32,7 @@ namespace LanguageList.Controllers
             var languageMst = from m in _context.LanguageMst
                          select m;
 
-            var viewModel = new LanguageMstViewModel
+            var viewModel = new LanguageListViewModel
             {
                 LanguageNames = new SelectList(await query.ToListAsync()),
                 LanguageMst = await languageMst.ToListAsync()
@@ -53,7 +55,7 @@ namespace LanguageList.Controllers
                 languageMst = languageMst.Where(x => x.LanguageName == selectName);
             }
 
-            var viewModel = new LanguageMstViewModel
+            var viewModel = new LanguageListViewModel
             {
                 LanguageNames = new SelectList(await query.ToListAsync()),
                 LanguageMst = await languageMst.ToListAsync(),
@@ -84,7 +86,8 @@ namespace LanguageList.Controllers
         // GET: LanguageMst/Create
         public IActionResult Create()
         {
-            return View();
+            var viewModel = new LanguageMstViewModel();
+            return View(viewModel);
         }
 
         // POST: LanguageMst/Create
@@ -101,8 +104,16 @@ namespace LanguageList.Controllers
                 _context.Add(languageMst);
                 // INSERT実行
                 await _context.SaveChangesAsync();
-                　// 一覧画面に遷移
-                return RedirectToAction(nameof(Index));
+                // 登録完了メッセージを設定
+                var viewModel = new LanguageMstViewModel
+                {
+                    LanguageName = String.Empty,
+                    CompletionMessage = "[Info]" + languageMst.LanguageName + "を登録しました。"
+                };
+                ModelState.Clear();
+                // 新規作成画面を再表示する
+                //return RedirectToAction(nameof(Create));
+                return View("Create", viewModel);
             }
             return View(languageMst);
         }

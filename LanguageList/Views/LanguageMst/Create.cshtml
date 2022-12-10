@@ -1,27 +1,34 @@
-﻿@model LanguageList.Models.LanguageMst
+﻿@model LanguageList.ViewModels.LanguageMstViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
+
 <div class="container">
     <div class="text-center my-4 fw-bold text-decoration-underline">新規登録</div>
-    <form asp-action="Create">
-        <div class="row border-bottom mb-4 d-flex justify-content-center">
-            <div class="col-md-4">
+    <div class="row border-bottom mb-4 d-flex justify-content-center">
+        <div class="col-md-4">
+            <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="LanguageName" class="control-label"></label>
                     <input asp-for="LanguageName" class="form-control" />
                     <span asp-validation-for="LanguageName" class="text-danger"></span>
+                    @{
+                        if (!string.IsNullOrEmpty(Model.CompletionMessage))
+                        {
+                            <span class="text-primary">@Model.CompletionMessage</span>
+                        }
+                    }
                 </div>
                 <div class="form-group my-4 text-center">
                     <button type="submit" class="btn btn-primary">確定</button>
                     <button type="button" class="btn btn-secondary ms-4" onclick="location.href='/LanguageMst'">戻る</button>
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 
 @section Scripts {
