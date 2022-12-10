@@ -1,9 +1,11 @@
 ﻿@model LanguageList.ViewModels.LanguageMstViewModel
-@*@model IEnumerable<LanguageList.Models.LanguageMst>*@
 
 @{
     ViewData["Title"] = "Index";
 }
+
+<link rel="stylesheet" href="~/css/Index.css" asp-append-version="true" />
+<script src="~/js/Index.js" asp-append-version="true"></script>
 
 <div class="container">
     <h2 class="text-center my-4">言語一覧</h2>
@@ -14,50 +16,57 @@
             <a asp-action="#">終了</a>
         </div>
         <div class="col-md-6 d-flex justify-content-center mb-4">
-            <form asp-controller="LanguageMst" asp-action="Index" method="get">
+            <form asp-controller="LanguageMst" asp-action="Search" method="get">
                 言語名：
-                <select asp-for="selectName" asp-items="Model.LanguageNames">
+                <select asp-for="SelectName" asp-items="Model.LanguageNames">
                     <option value="" selected>全て</option>
                 </select>
                 <button type="submit" class="btn btn-secondary">検索</button>
             </form>
         </div>
     </div>
-    <table class="table mx-auto" style="width:60%;">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.LanguageMst[0].Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LanguageMst[0].LanguageName)
-                </th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.LanguageMst)
-            {
-            <tr>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </a>
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">
-                        @Html.DisplayFor(modelItem => item.LanguageName)
-                    </a>
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">編集</a>
-                </td>
-                <td>
-                    <a asp-action="Delete" asp-route-id="@item.Id">削除</a>
-                </td>
-            </tr>
+    @{
+        if (Model.ShowIndex)
+        {
+            <div>
+                <table class="table mx-auto" style="width:60%;">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.LanguageMst[0].Id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.LanguageMst[0].LanguageName)
+                            </th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.LanguageMst)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.Id">
+                                        @Html.DisplayFor(modelItem => item.Id)
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.Id">
+                                        @Html.DisplayFor(modelItem => item.LanguageName)
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.Id">編集</a>
+                                </td>
+                                <td>
+                                    <a asp-action="Delete" asp-route-id="@item.Id">削除</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         }
-        </tbody>
-    </table>
+    }
 </div>

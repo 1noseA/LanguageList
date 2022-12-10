@@ -21,7 +21,7 @@ namespace LanguageList.Controllers
         }
 
         // GET: LanguageMst
-        public async Task<IActionResult> Index(string selectName)
+        public async Task<IActionResult> Index()
         {
             // DBから全ての言語名を取得するLINQクエリ
             IQueryable<string> query = from m in _context.LanguageMst
@@ -30,11 +30,6 @@ namespace LanguageList.Controllers
             var languageMst = from m in _context.LanguageMst
                          select m;
 
-            if (!String.IsNullOrEmpty(selectName))
-            {
-                languageMst = languageMst.Where(x => x.LanguageName == selectName);
-            }
-            
             var viewModel = new LanguageMstViewModel
             {
                 LanguageNames = new SelectList(await query.ToListAsync()),
@@ -42,6 +37,30 @@ namespace LanguageList.Controllers
             };
 
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> Search(string selectName)
+        {
+            // DBから全ての言語名を取得するLINQクエリ
+            IQueryable<string> query = from m in _context.LanguageMst
+                                       orderby m.Id
+                                       select m.LanguageName;
+            var languageMst = from m in _context.LanguageMst
+                              select m;
+
+            if (!String.IsNullOrEmpty(selectName))
+            {
+                languageMst = languageMst.Where(x => x.LanguageName == selectName);
+            }
+
+            var viewModel = new LanguageMstViewModel
+            {
+                LanguageNames = new SelectList(await query.ToListAsync()),
+                LanguageMst = await languageMst.ToListAsync(),
+                ShowIndex = true
+            };
+
+            return View("Index", viewModel);
         }
 
         // GET: LanguageMst/Details/5
