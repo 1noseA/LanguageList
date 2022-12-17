@@ -1,4 +1,4 @@
-﻿@model LanguageList.ViewModels.LanguageListViewModel
+﻿@model LanguageList.ViewModels.LanguageMstViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -45,24 +45,37 @@
                     <tbody>
                         @foreach (var item in Model.LanguageMst)
                         {
-                            <tr>
-                                <td>
-                                    <a asp-action="Details" asp-route-id="@item.Id">
-                                        @Html.DisplayFor(modelItem => item.Id)
-                                    </a>
-                                </td>
-                                <td>
-                                    <a asp-action="Details" asp-route-id="@item.Id">
-                                        @Html.DisplayFor(modelItem => item.LanguageName)
-                                    </a>
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.Id">編集</a>
-                                </td>
-                                <td>
-                                    <a asp-action="Delete" asp-route-id="@item.Id">削除</a>
-                                </td>
-                            </tr>
+                            <form asp-action="Edit" asp-route-id="@item.Id" name="updateForm">
+                                <tr>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@item.Id">
+                                            @Html.DisplayFor(modelItem => item.Id)
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <div class="showDetail">
+                                            @Html.DisplayFor(modelItem => item.LanguageName)
+                                        </div>
+                                        <div class="showForm">
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                            <input type="hidden" asp-for="Id" />
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(modelItem => item.LanguageName)
+                                                <span asp-validation-for="LanguageName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="showSubmit">
+                                            <a asp-action="Edit" asp-route-id="@item.Id" onclick="document.updateForm.submit" class="submit">更新</a>
+                                            <a href="#" class="edit">編集</a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a asp-action="Delete" asp-route-id="@item.Id">削除</a>
+                                    </td>
+                                </tr>
+                            </form>
                         }
                     </tbody>
                 </table>

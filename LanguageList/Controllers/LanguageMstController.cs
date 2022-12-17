@@ -32,7 +32,7 @@ namespace LanguageList.Controllers
             var languageMst = from m in _context.LanguageMst
                          select m;
 
-            var viewModel = new LanguageListViewModel
+            var viewModel = new LanguageMstViewModel
             {
                 LanguageNames = new SelectList(await query.ToListAsync()),
                 LanguageMst = await languageMst.ToListAsync()
@@ -55,7 +55,7 @@ namespace LanguageList.Controllers
                 languageMst = languageMst.Where(x => x.LanguageName == selectName);
             }
 
-            var viewModel = new LanguageListViewModel
+            var viewModel = new LanguageMstViewModel
             {
                 LanguageNames = new SelectList(await query.ToListAsync()),
                 LanguageMst = await languageMst.ToListAsync(),
@@ -119,20 +119,23 @@ namespace LanguageList.Controllers
         }
 
         // GET: LanguageMst/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.LanguageMst == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    // idがないもしくは言語情報がない場合
+        //    if (id == null || _context.LanguageMst == null)
+        //    {
+        //        // 404
+        //        return NotFound();
+        //    }
 
-            var languageMst = await _context.LanguageMst.FindAsync(id);
-            if (languageMst == null)
-            {
-                return NotFound();
-            }
-            return View(languageMst);
-        }
+        //    var languageMst = await _context.LanguageMst.FindAsync(id);
+        //    if (languageMst == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(languageMst);
+        //}
 
         // POST: LanguageMst/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
