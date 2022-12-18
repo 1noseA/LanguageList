@@ -45,7 +45,7 @@
                     <tbody>
                         @foreach (var item in Model.LanguageMst)
                         {
-                            <form asp-action="Edit" asp-route-id="@item.Id" name="updateForm">
+                            <form asp-action="Edit" asp-route-id="@item.Id" method="post">
                                 <tr>
                                     <td>
                                         <a asp-action="Details" asp-route-id="@item.Id">
@@ -58,16 +58,16 @@
                                         </div>
                                         <div class="showForm">
                                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                            <input type="hidden" asp-for="Id" />
+                                            <input type="hidden" asp-for="SelectName" />
                                             <div class="form-group">
-                                                @Html.TextBoxFor(modelItem => item.LanguageName)
-                                                <span asp-validation-for="LanguageName" class="text-danger"></span>
+                                                <input asp-for="@item.LanguageName" class="form-control" name="languageName" />
+                                                <span asp-validation-for="@item.LanguageName" class="text-danger"></span>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="showSubmit">
-                                            <a asp-action="Edit" asp-route-id="@item.Id" onclick="document.updateForm.submit" class="submit">更新</a>
+                                            <input type="submit" class="submit" value="更新" />
                                             <a href="#" class="edit">編集</a>
                                         </div>
                                     </td>
@@ -83,3 +83,9 @@
         }
     }
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

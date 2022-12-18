@@ -29,13 +29,14 @@ namespace LanguageList.Controllers
             IQueryable<string> query = from m in _context.LanguageMst
                                         orderby m.Id
                                         select m.LanguageName;
-            var languageMst = from m in _context.LanguageMst
-                         select m;
+            //var languageMst = from m in _context.LanguageMst
+            //                  orderby m.Id
+            //                  select m;
 
             var viewModel = new LanguageMstViewModel
             {
-                LanguageNames = new SelectList(await query.ToListAsync()),
-                LanguageMst = await languageMst.ToListAsync()
+                LanguageNames = new SelectList(await query.ToListAsync())
+                //LanguageMst = await languageMst.ToListAsync()
             };
 
             return View(viewModel);
@@ -48,11 +49,12 @@ namespace LanguageList.Controllers
                                        orderby m.Id
                                        select m.LanguageName;
             var languageMst = from m in _context.LanguageMst
+                              orderby m.Id
                               select m;
 
             if (!String.IsNullOrEmpty(selectName))
             {
-                languageMst = languageMst.Where(x => x.LanguageName == selectName);
+                languageMst = (IOrderedQueryable<LanguageMst>)languageMst.Where(x => x.LanguageName == selectName);
             }
 
             var viewModel = new LanguageMstViewModel
@@ -62,25 +64,9 @@ namespace LanguageList.Controllers
                 ShowIndex = true
             };
 
+            //Session["LanguageList"] = viewModel;
+
             return View("Index", viewModel);
-        }
-
-        // GET: LanguageMst/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.LanguageMst == null)
-            {
-                return NotFound();
-            }
-
-            var languageMst = await _context.LanguageMst
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (languageMst == null)
-            {
-                return NotFound();
-            }
-
-            return View(languageMst);
         }
 
         // GET: LanguageMst/Create
@@ -112,64 +98,42 @@ namespace LanguageList.Controllers
                 };
                 ModelState.Clear();
                 // 新規作成画面を再表示する
-                //return RedirectToAction(nameof(Create));
                 return View("Create", viewModel);
             }
             return View(languageMst);
         }
-
-        // GET: LanguageMst/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    // idがないもしくは言語情報がない場合
-        //    if (id == null || _context.LanguageMst == null)
-        //    {
-        //        // 404
-        //        return NotFound();
-        //    }
-
-        //    var languageMst = await _context.LanguageMst.FindAsync(id);
-        //    if (languageMst == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(languageMst);
-        //}
 
         // POST: LanguageMst/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LanguageName")] LanguageMst languageMst)
+        public async Task<IActionResult> Edit(int id, string languageName, string selectName)
         {
-            if (id != languageMst.Id)
+            
+            if (id == 0 || string.IsNullOrEmpty(languageName))
             {
                 return NotFound();
             }
+
+            LanguageMst model = new LanguageMst();
+            model.Id = id;
+            model.LanguageName = languageName;
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(languageMst);
+                    _context.Update(model);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LanguageMstExists(languageMst.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Search));
             }
-            return View(languageMst);
+            return RedirectToAction(nameof(Search));
         }
 
         // GET: LanguageMst/Delete/5
