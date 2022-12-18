@@ -29,14 +29,10 @@ namespace LanguageList.Controllers
             IQueryable<string> query = from m in _context.LanguageMst
                                         orderby m.Id
                                         select m.LanguageName;
-            //var languageMst = from m in _context.LanguageMst
-            //                  orderby m.Id
-            //                  select m;
 
             var viewModel = new LanguageMstViewModel
             {
                 LanguageNames = new SelectList(await query.ToListAsync())
-                //LanguageMst = await languageMst.ToListAsync()
             };
 
             return View(viewModel);
@@ -63,9 +59,6 @@ namespace LanguageList.Controllers
                 LanguageMst = await languageMst.ToListAsync(),
                 ShowIndex = true
             };
-
-            //Session["LanguageList"] = viewModel;
-
             return View("Index", viewModel);
         }
 
@@ -136,28 +129,10 @@ namespace LanguageList.Controllers
             return RedirectToAction(nameof(Search));
         }
 
-        // GET: LanguageMst/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.LanguageMst == null)
-            {
-                return NotFound();
-            }
-
-            var languageMst = await _context.LanguageMst
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (languageMst == null)
-            {
-                return NotFound();
-            }
-
-            return View(languageMst);
-        }
-
         // POST: LanguageMst/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (_context.LanguageMst == null)
             {
@@ -170,7 +145,7 @@ namespace LanguageList.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Search));
         }
 
         private bool LanguageMstExists(int id)
