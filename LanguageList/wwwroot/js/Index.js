@@ -20,3 +20,12 @@
         }
     });
 });
+
+// 確認ダイアログ
+function submitCheck() {
+    if (window.confirm('削除してよろしいですか。')) {
+        return true;
+    } else {
+        return false;
+    }
+}
